@@ -1,0 +1,18 @@
+---
+title: "Untitled"
+format: 
+  html:
+    embed-resources: true
+editor: visual
+bibliography: imedatoteke.bib
+---
+
+instaliraj citation package
+
+v clanku Uros godnov in v knjigi statistics 2nd je
+
+[@mariappan2019statistics]
+
+\![title\](<https://news-cdn.softpedia.com/images/news2/official-arch-linux-iso-image-to-drop-32-bit-i686-support-starting-march-2017-512190-2.jpg>)
+
+REFERENCE

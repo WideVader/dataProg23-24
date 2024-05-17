@@ -1,0 +1,20 @@
+m1<-matrix(9:1,3,,T)
+df1<-data.frame(A=c("Peter","Klavdija","Uros"),
+           B=c("Mursic","Kutnar","Godnov"),
+           C=c(T,F,T))
+df1
+str(df1)
+colnames(m1)<-c("stolpec1","stolpec2","stolpec3")
+rownames(m1)<-c("vrstica1","vrstica2","vrstica3")
+rownames(m1)[2]<-"miska"
+m1["miska","stolpec3"]<-100
+m1[,"stolpec2"]<-10:12
+colnames(df1)<-c("Ime","Priimek","Spol")
+
+df1$Ime
+df1$Letnik<-c(88,80,75)
+df1[,"Novo"]<-c(1,2,3)
+df1[,-5]->df1
+df1[nrow(df1)+1,]<-list("Ademir","Hujdurovic",T,87)
+df1
+str(df1)

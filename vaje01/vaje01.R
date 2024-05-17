@@ -1,0 +1,9 @@
+a=3+5-10;a
+4^5
+log(3*5)
+exp(1)
+exp(2.484907)
+sin(pi)
+sqrt(4)/log10(100)
+abs(-10)+floor(4.6)+ceiling(3.2)
+#B
