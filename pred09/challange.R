@@ -14,7 +14,21 @@ df1<-challenge %>%
   pivot_longer(cols="2000_preb_tot_3":"2020_ekonv_tot_89",
                names_pattern="(\\d+)_(.*)",
                names_to=c("leto","spremenljivka"),
-               values_transform = as.character)
+               values_transform = as.character) %>% 
+  mutate(spremenljivka=str_replace_all(spremenljivka,
+                                       "_\\d+$",""),
+         value=str_replace_all(value,"\\D+","NA"),
+         value=as.numeric(value))
+
+
+df1 %>% 
+  dplyr::select(id,spremenljivka,value,leto) %>% 
+  dplyr::filter(spremenljivka=="kmg_dz_1") %>% 
+  pivot_wider(id_cols=c(id,leto),
+              names_from = "spremenljivka") %>% 
+  pivot_wider(id_cols=c(id),
+              names_from = "leto",
+              values_from = "kmg_dz_1")
 
 
 
