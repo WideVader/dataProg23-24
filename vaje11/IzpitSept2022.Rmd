@@ -1,0 +1,122 @@
+
+---
+title: "Izpit september 2022 (90 min)"
+author: "Ime Priimek"
+date: "`r Sys.Date()`"
+output: 
+  html_document: 
+    toc: yes
+    toc_float: yes
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, message=FALSE, warning = FALSE)
+
+```
+
+## Uvod
+
+Reši naloge, knitaj markdown v html datoteko in jo naloži na e-učilnico. Nastavite Rmarkdown tako, da sta vidna koda in izhod, vendar skrijete vsa opozorila in sporočila. Nastavite ga tudi tako, da se html ustvari ne glede na napake v kodi. Če imate dane vzorčne podatke, morajo biti vaše rešitve razširljive na večje primere.
+
+Srečno!
+
+
+
+## Problem 1
+
+Dan je data.frame z nekaterimi dogodki in njihovimi datumi. Razvrsti vrstice od najbolj zgodnje do najkasnejše!
+
+
+```{r}
+p1<-data.frame(Event=c("World cup","Ozivela ulica","Euro Math Congress","Summer school Rogla","Final exams","HL3 release date"),Year=c(2022,2021,2004,2022,1999,2077),Day=c(11,2,30,14,5,6),Month=c(12,3,4,7,10,10),stringsAsFactors=F)
+```
+
+
+
+
+## Problem 2
+
+Napišite funkcijo, ki za dan data.frame vrne isti data.frame ampak samo s stolpci, ki ne vsebujejo NA vrednosti. Poženite svojo funkcijo na data.frame-u **airquality**.
+
+
+```{r}
+library(tidyverse)
+p2<-\(df){df %>% select_if(\(x){!is.na((max(x)))})}
+p2(airquality)
+```
+
+
+
+
+## Problem 5
+
+V priloženi datoteki **OrderDatabase.xlsx** so 3 delovni listi, od katerih vsak vsebuje data.frame.
+Kolikšen je skupni prihodek artiklov, naročenih dne 3.3.2006?
+
+
+```{r}
+getwd()
+dir(pattern = "OrderDatabase")->filename
+filename %>% readxl::excel_sheets() %>% sapply(\(x){readxl::read_excel(filename,sheet=x)}) -> L
+
+L$orders %>% 
+  inner_join(L$orderline) %>% 
+  inner_join(L$stock) %>% 
+  select(OrderDate,Qty,UnitCost) %>% 
+  filter(OrderDate==dmy("3.3.2006")) %>% 
+  summarise(sum(Qty*UnitCost))
+  #{sum(.$Qty*.$UnitCost)}
+```
+
+
+
+
+## Problem 6
+
+Glede na data.frame **tidyr::billboard** prikaži 5 najpogosteje uporabljenih besed v imenih pesmi skupaj z njihovim številom (kombinacije, kot so "Can't", naj štejejo kot 1 beseda za ta problem).
+
+
+
+```{r}
+tidyr::billboard %>% .$track %>% str_split("[^A-Za-z0-9'-]") %>% 
+  unlist() %>% 
+  .[.!=""] %>% 
+  factor() %>% 
+  summary() %>% 
+  .[1:5]
+  #.[order(-.)] %>% 
+  #top_n(5)
+
+
+
+```
+
+
+
+## Problem 7
+
+Dan je data.frame o Titaniku https://vincentarelbundock.github.io/Rdatasets/csv/COUNT/titanic.csv
+, potniški ladji, potopljeni leta 1912. Raziščite, ali so med potniki, ko je prišlo na pomoč, res imele prednost "ženske in otroci" pred "moškimi". Narišite histogram štirih skupin (vsaka kombinacija starosti in spola), ki prikazuje odstotek preživelih izmed populacije te skupine.
+
+
+
+```{r}
+"https://vincentarelbundock.github.io/Rdatasets/csv/COUNT/titanic.csv" %>% 
+  read.csv() -> titanik
+
+titanik %>% 
+  group_by(age,sex) %>% 
+  summarise(Skupaj=n(),Preziveli=sum(survived=="yes"),P2=sum(ifelse(survived=="yes",1,0)),Procent=Preziveli/Skupaj*100) %>% 
+  {print(.);.} %>% 
+  ggplot() + aes(x=paste(age,sex),weight=Procent) + geom_bar()
+```
+
+
+
+
+
+
+
+
